@@ -2,13 +2,15 @@ import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from './video_util.js';
 
 class VideoCall extends React.Component{
-  constructor(props){
-    super(props);
-    this.pcPeers = {};
-    this.userId = Math.floor(Math.random() * 10000);
-    this.joinCall = this.joinCall.bind(this);
-    this.leaveCall = this.leaveCall.bind(this);
+
+  state = {
+    pcPeers: {},
+    userId: Math.floor(Math.random() * 10000),
+    joinCall: this.joinCall,
+    leaveCall: this.leaveCall,
   }
+
+
   componentDidMount(){
   }
   join(data){
@@ -33,5 +35,4 @@ class VideoCall extends React.Component{
      <button onClick={this.leaveCall}>Leave Call</button>
     </div>)
   }
-}
 export default VideoCall;
