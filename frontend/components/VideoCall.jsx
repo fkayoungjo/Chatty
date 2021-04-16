@@ -23,8 +23,31 @@ class VideoCall extends React.Component{
 
   join(data){
   }
-  joinCall(){
-  }
+  joinCall(e){
+  App.cable.subscriptions.create(
+    { channel: "CallChannel" },
+    {
+      connected: () => {
+        broadcastData({ type: JOIN_CALL, from: this.userId});
+      },
+      received: data => {
+        console.log("RECEIVED: ", data);
+        if (data.from === this.userId) return;
+        switch(data.type){
+          case JOIN_CALL:
+            return this.join(data);
+          case EXCHANGE:
+            if (data.to !== this.userId) return;
+            return this.exchange(data);
+          case LEAVE_CALL:
+            return this.removeUser(data);
+          default:
+            return;
+        }
+      }
+    });
+}
+
   createPC(userId, offerBool){
   }
   exchange(data){
