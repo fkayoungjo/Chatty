@@ -21,8 +21,8 @@ class VideoCall extends React.Component{
      }).catch(error => { console.log(error)});
 }
 
-  join(data){
-  }
+  join(data){ this.createPC(data.from, true) }
+  
   joinCall(e){
   App.cable.subscriptions.create(
     { channel: "CallChannel" },
