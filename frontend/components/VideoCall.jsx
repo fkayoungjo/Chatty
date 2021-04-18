@@ -22,7 +22,7 @@ class VideoCall extends React.Component{
 }
 
   join(data){ this.createPC(data.from, true) }
-  
+
   joinCall(e){
   App.cable.subscriptions.create(
     { channel: "CallChannel" },
@@ -48,8 +48,30 @@ class VideoCall extends React.Component{
     });
 }
 
-  createPC(userId, offerBool){
-  }
+createPC(userId, offerBool){
+const pc = new RTCPeerConnection(ice);
+this.pcPeers[userId] = pc;
+this.localStream.getTracks()
+    .forEach(track => pc.addTrack(track, this.localStream));
+if (offerBool) {
+  pc.createOffer().then(offer => {
+    pc.setLocalDescription(offer).then(() => {
+     setTimeout( () => {
+      broadcastData({
+        type: EXCHANGE,
+        from: this.userId,
+        to: userId,
+        sdp: JSON.stringify(pc.localDescription),
+      });
+     }, 0);
+    });
+  });
+ }
+pc.onicecandidate = (e) => {};
+pc.ontrack = (e) => {};
+pc.oniceconnectionstatechange = (e) => {};
+return pc;
+}
   exchange(data){
   }
 
