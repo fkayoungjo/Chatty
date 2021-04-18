@@ -67,9 +67,26 @@ if (offerBool) {
     });
   });
  }
-pc.onicecandidate = (e) => {};
-pc.ontrack = (e) => {};
-pc.oniceconnectionstatechange = (e) => {};
+ pc.onicecandidate = (e) => {
+   broadcastData({
+     type: EXCHANGE,
+     from: this.userId,
+     to: userId,
+     sdp: JSON.stringify(e.candidate)
+   })
+ }
+ pc.ontrack = (e) => {
+   const remoteVid = document.createElement("video");
+   remoteVid.id = `remoteVideoContainer+${userId}`;
+   remoteVid.autoplay = "autoplay";
+   remoteVid.srcObject = e.streams[0];
+   this.remoteVideoContainer.appendChild(remoteVid);
+ }
+ pc.oniceconnectionstatechange = (e) => {
+   if (pc.iceConnectionState === 'disconnected'){
+     broadcastData({ type: LEAVE_CALL, from: userId });
+   }
+ }
 return pc;
 }
   exchange(data){
