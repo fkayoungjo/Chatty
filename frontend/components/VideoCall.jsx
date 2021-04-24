@@ -87,7 +87,7 @@ if (offerBool) {
      broadcastData({ type: LEAVE_CALL, from: userId });
    }
  }
-return pc;
+return p;
 }
   exchange(data){
   }
