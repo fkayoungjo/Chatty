@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from './video_util.js';
 
-class VideoCall extends React.Component{
+class VideoCall extends Component{
 
   state = {
     pcPeers: {},
