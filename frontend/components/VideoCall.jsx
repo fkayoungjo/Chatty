@@ -137,8 +137,13 @@ leaveCall(e){
  broadcastData({ type: LEAVE_CALL, from: this.userId });
 }
 
-  removeUser(data){
-  }
+removeUser(data){
+let video =          document.getElementById(`remoteVideoContainer+${data.from}`);
+video && video.remove();
+let peers = this.pcPeers
+delete peers[data.from]
+}
+
   render(){
     return(
     <div className="VideoCall">
