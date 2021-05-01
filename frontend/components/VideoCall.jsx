@@ -119,7 +119,7 @@ if(data.sdp){
      }
      });
   }
-}``
+}
 }
 
 leaveCall(e){
