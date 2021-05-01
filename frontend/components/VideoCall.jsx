@@ -89,8 +89,38 @@ if (offerBool) {
  }
 return pc;
 }
-  exchange(data){
+exchange(data){
+let pc;
+if(this.pcPeers[data.from]){
+  pc = this.pcPeers[data.from];
+} else{
+  pc = this.createPC(data.from, false);
+}
+if (data.candidate){
+  let candidate = JSON.parse(data.candidate)
+  pc.addIceCandidate(new RTCIceCandidate(candidate))
+}
+if(data.sdp){
+  const sdp = JSON.parse(data.sdp);
+  if(sdp && !sdp.candidate){
+     pc.setRemoteDescription(sdp).then( () =>{
+     if (sdp.type === 'offer'){
+        pc.createAnswer().then(answer => {
+           pc.setLocalDescription(answer)
+           .then( () => {
+              broadcastData({
+                 type: EXCHANGE,
+                 from: this.userId,
+                 to: data.from,
+                 sdp: JSON.stringify(pc.localDescription)
+              });
+           });
+        });
+     }
+     });
   }
+}``
+}
 
   leaveCall(){
   }
